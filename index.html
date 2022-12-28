@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" x-data="weather">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" :href="getWeather?.current?.condition.icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Weather App</title>
+    <script type="module" crossorigin src="/assets/index-a90494e0.js"></script>
+    <link rel="stylesheet" href="/assets/index-88dc38d3.css">
+  </head>
+  <body :class="openPopup && 'lock'">
+    <!-- Preloader -->
+    <div class="preloader" x-init="togglePreloader" x-show="preloader" x-transition.duration.500ms>
+      <div class="lds-ripple"><div></div><div></div></div>
+    </div>
+    <!-- ------- -->
+    <div x-model="getData" x-init="updateData" x-cloak id="app">
+      <header class="header">
+        <div class="header__container"></div>
+      </header>
+      <main class="main">
+        <div class="main__container">
+          <div class="weather__header">
+            <div class="weather__icon">
+              <img :src="getWeather?.current?.condition.icon">
+            </div>
+            <div class="weather__info">
+              <p class="weather__status" 
+                x-text="getWeather?.current?.condition.text"></p>
+              <p class="weather__status"
+                x-show="getWeather?.current"
+                x-text="getWeather?.current?.temp_c + ' °C'"></p>
+              <p class="weather__status" 
+                x-text="getWeather?.current?.temp_f + ' °F'"></p>
+              <div class="weather__status">
+                <p>Last updated: </p>
+                <span x-text="getWeather?.current?.last_updated"></span>
+              </div>
+            </div>
+          </div>
+          <div class="weather__location">
+            <p class="weather__location-country" x-text="getWeather?.location?.country"></p>
+            <p class="weather__location-city" x-text="getWeather?.location?.name"></p>
+          </div>
+          <div class="weather__footer">
+            <button @click="togglePopup">Choose your city</button>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="footer__container">
+          <p>Created by <a href="https://pubupcreed.github.io/portfolio/">Ivan Chaplinsky</a></p>
+        </div>
+      </footer>
+    </div>
+    <div class="popup" x-show="openPopup" x-effect="searchData" x-transition>
+      <div class="popup__overlay">
+        <div class="popup__container" @click.outside="togglePopup">
+          <div class="popup__header">
+            <p class="search">Search</p>
+            <form @click.prevent>
+              <input type="text" x-model="searchCity">
+            </form>
+          </div>
+          <div class="popup__main">
+            <div class="no-data" x-show="!searchCity" x-transition>
+              <p>Enter the name of the city</p>
+            </div>
+            <ul class="city__list" x-show="searchCity" x-transition>
+              <template x-for="item in searchResult" :key="item.id">
+                <li class="city__list-item" @click="updateCity(item?.name)">
+                  <p x-text="item?.name"></p>
+                  <p x-text="item?.country"></p>
+                </li>
+              </template>
+            </ul>
+          </div>
+          <div class="popup__footer">
+            <button @click="togglePopup">Close popup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>
