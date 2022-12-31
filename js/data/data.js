@@ -1,6 +1,6 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('weather', () => ({
-        baseURL: `http://api.weatherapi.com/v1/`,
+        baseURL: `https://api.weatherapi.com/v1/`,
         key: `?key=162d6a0b39d54500a55194046222712`,
         city: Alpine.$persist(''),
         searchCity: '',
