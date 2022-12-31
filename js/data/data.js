@@ -3,24 +3,20 @@ document.addEventListener('alpine:init', () => {
         baseURL: `http://api.weatherapi.com/v1/`,
         key: `?key=162d6a0b39d54500a55194046222712`,
         city: Alpine.$persist(''),
-        currentWeather: 'current.json',
-        search: 'search.json',
         searchCity: '',
         searchResult: [],
         getWeather: [],
         preloader: true,
         openPopup: false,
 
-        getData() {
-            fetch(`${this.baseURL}${this.currentWeather}${this.key}&q=${this.city ? this.city : 'London'}`)
-            .then(response => response.json())
-            .then(data => this.getWeather = data)
+        async getData() {
+            const res = await fetch(`${this.baseURL}current.json${this.key}&q=${this.city ? this.city : 'London'}`);
+            this.getWeather = await res.json();
         },
 
-        searchData() {
-            fetch(`${this.baseURL}${this.search}${this.key}&q=${this.searchCity}`)
-            .then(response => response.json())
-            .then(data => this.searchResult = data)
+        async searchData() {
+            const res = await fetch(`${this.baseURL}search.json${this.key}&q=${this.searchCity}`);
+            this.searchResult = await res.json();
         },
 
         updateCity(item) {
